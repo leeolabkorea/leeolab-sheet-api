@@ -24,19 +24,20 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
-        system: `You are a product analysis AI. Analyze product photos and return ONLY valid JSON with no markdown, no code fences.
-
-Return this exact structure:
-{"brand":"...","product_name":"...","meta":"...","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"..."},{"label":"line 2","value":"..."},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"..."}],"base_prompt":"...studio-lit, sharp focus, photorealistic, 8K quality.","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"..."}`,
+        system: 'You are a product analysis AI. Analyze product photos and return ONLY valid JSON with no markdown, no code fences. Return this structure: {"brand":"...","product_name":"...","meta":"...","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"..."},{"label":"line 2","value":"..."},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"..."}],"base_prompt":"...studio-lit, sharp focus, photorealistic, 8K quality.","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"..."}',
         messages: req.body.messages,
       }),
     });
 
-  const text = await response.text();
-try {
-  const data = JSON.parse(text);
-  res.status(200).json(data);
-} catch(e) {
-  res.status(200).json({ debug: text });
-}
+    const text = await response.text();
+    try {
+      const data = JSON.parse(text);
+      res.status(200).json(data);
+    } catch (e) {
+      res.status(200).json({ debug: text });
+    }
+
+  } catch (err) {
+    res.status(500).json({ error: { message: err.message } });
+  }
 }
