@@ -24,41 +24,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 2000,
-        
-        system: IMPORTANT: Read and include ALL text visible on the product labels - both Korean (한국어) and English. This includes product descriptions, marketing copy, ingredient callouts, company information, and any small print. Do not omit any text line. `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON with no markdown, no code fences, no extra text.
-
-The base_prompt must be VERY detailed - minimum 4 sentences covering:
-1. Exact container shape and material (e.g. "short cylindrical clear glass jar")
-2. Cap/lid details (color, material, finish - matte/glossy)
-3. Label details (colors, exact text, typography, placement)
-4. Product color visible through container
-5. Lighting and photography style for AI generation
-
-Return this exact JSON structure:
-{
-  "brand": "exact brand name from label",
-  "product_name": "full exact product name as written on label",
-  "meta": "size/weight · material · ref code if visible",
-  "form": [
-    {"label": "shape", "value": "..."},
-    {"label": "cap", "value": "..."},
-    {"label": "body", "value": "..."},
-    {"label": "product color", "value": "..."},
-    {"label": "front label", "value": "..."},
-    {"label": "back label", "value": "..."}
-  ],
-  "text_exact": [
-    {"label": "line 1", "value": "exact text from label"},
-    {"label": "line 2", "value": "exact text"},
-    {"label": "brand mark", "value": "exact brand text"},
-    {"label": "text color", "value": "..."},
-    {"label": "key callout", "value": "..."},
-    {"label": "ingredients", "value": "full ingredient list visible on label"}
-  ],
-  "base_prompt": "DETAILED 4-sentence description: sentence 1 about container shape/material, sentence 2 about cap/lid, sentence 3 about label design and exact text, sentence 4 about product color and photography style. End with: studio-lit, sharp focus, photorealistic, 8K quality.",
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "negative_prompt": "blurry, low resolution, distorted text, wrong label color, incorrect product name spelling, extra labels, amateur lighting, out of focus"
-}`,
+        system: 'CRITICAL INSTRUCTION: You must read and transcribe ALL text visible on the product labels - every single line of Korean (한국어) AND English text. Include product descriptions, marketing copy, ingredient lists, company info, batch codes, and any small print. Do not skip or summarize any text. You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON with no markdown, no code fences, no extra text. The base_prompt must be VERY detailed - minimum 4 sentences covering: 1) Exact container shape and material, 2) Cap/lid color, material, finish, 3) Label colors, all exact text including Korean, typography and placement, 4) Product color visible through container, 5) Lighting and photography style. Return this exact JSON structure: {"brand":"exact brand name","product_name":"full exact product name from label","meta":"size/weight · material · ref code","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"exact text"},{"label":"line 2","value":"exact text"},{"label":"line 3","value":"exact Korean text"},{"label":"line 4","value":"exact Korean text"},{"label":"line 5","value":"..."},{"label":"line 6","value":"..."},{"label":"line 7","value":"..."},{"label":"line 8","value":"..."},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"full ingredient list"}],"base_prompt":"DETAILED 4-sentence description including all Korean and English label text exactly as written. End with: studio-lit, sharp focus, photorealistic, 8K quality.","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"blurry, low resolution, distorted text, wrong label color, incorrect product name spelling, missing Korean text, amateur lighting, out of focus"}',
         messages: req.body.messages,
       }),
     });
