@@ -23,18 +23,43 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1500,
-       system: `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON.
+        max_tokens: 2000,
+        system: `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON with no markdown, no code fences, no extra text.
 
-The base_prompt must be VERY detailed and specific - at least 3-4 sentences describing:
-1. Exact container shape, material, dimensions
-2. Cap/lid color, material, finish (matte/glossy)
-3. Label colors, typography style, exact text placement
+The base_prompt must be VERY detailed - minimum 4 sentences covering:
+1. Exact container shape and material (e.g. "short cylindrical clear glass jar")
+2. Cap/lid details (color, material, finish - matte/glossy)
+3. Label details (colors, exact text, typography, placement)
 4. Product color visible through container
-5. Overall brand aesthetic
+5. Lighting and photography style for AI generation
 
-Return this structure:
-{"brand":"...","product_name":"full exact name from label","meta":"...","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"exact text"},{"label":"line 2","value":"exact text"},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"full ingredient list visible"}],"base_prompt":"DETAILED description here - minimum 3 sentences covering all visual aspects","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"..."}`,
+Return this exact JSON structure:
+{
+  "brand": "exact brand name from label",
+  "product_name": "full exact product name as written on label",
+  "meta": "size/weight · material · ref code if visible",
+  "form": [
+    {"label": "shape", "value": "..."},
+    {"label": "cap", "value": "..."},
+    {"label": "body", "value": "..."},
+    {"label": "product color", "value": "..."},
+    {"label": "front label", "value": "..."},
+    {"label": "back label", "value": "..."}
+  ],
+  "text_exact": [
+    {"label": "line 1", "value": "exact text from label"},
+    {"label": "line 2", "value": "exact text"},
+    {"label": "brand mark", "value": "exact brand text"},
+    {"label": "text color", "value": "..."},
+    {"label": "key callout", "value": "..."},
+    {"label": "ingredients", "value": "full ingredient list visible on label"}
+  ],
+  "base_prompt": "DETAILED 4-sentence description: sentence 1 about container shape/material, sentence 2 about cap/lid, sentence 3 about label design and exact text, sentence 4 about product color and photography style. End with: studio-lit, sharp focus, photorealistic, 8K quality.",
+  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "negative_prompt": "blurry, low resolution, distorted text, wrong label color, incorrect product name spelling, extra labels, amateur lighting, out of focus"
+}`,
+        messages: req.body.messages,
+      }),
     });
 
     const text = await response.text();
