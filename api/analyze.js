@@ -24,9 +24,17 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
-        system: 'You are a product analysis AI. Analyze product photos and return ONLY valid JSON with no markdown, no code fences. Return this structure: {"brand":"...","product_name":"...","meta":"...","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"..."},{"label":"line 2","value":"..."},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"..."}],"base_prompt":"...studio-lit, sharp focus, photorealistic, 8K quality.","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"..."}',
-        messages: req.body.messages,
-      }),
+       system: `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON.
+
+The base_prompt must be VERY detailed and specific - at least 3-4 sentences describing:
+1. Exact container shape, material, dimensions
+2. Cap/lid color, material, finish (matte/glossy)
+3. Label colors, typography style, exact text placement
+4. Product color visible through container
+5. Overall brand aesthetic
+
+Return this structure:
+{"brand":"...","product_name":"full exact name from label","meta":"...","form":[{"label":"shape","value":"..."},{"label":"cap","value":"..."},{"label":"body","value":"..."},{"label":"product color","value":"..."},{"label":"front label","value":"..."},{"label":"back label","value":"..."}],"text_exact":[{"label":"line 1","value":"exact text"},{"label":"line 2","value":"exact text"},{"label":"brand mark","value":"..."},{"label":"text color","value":"..."},{"label":"key callout","value":"..."},{"label":"ingredients","value":"full ingredient list visible"}],"base_prompt":"DETAILED description here - minimum 3 sentences covering all visual aspects","tags":["tag1","tag2","tag3","tag4","tag5"],"negative_prompt":"..."}`,
     });
 
     const text = await response.text();
