@@ -32,10 +32,11 @@ Return this exact structure:
       }),
     });
 
-    const data = await response.json();
-    res.status(200).json(data);
-
-  } catch (err) {
-    res.status(500).json({ error: { message: err.message } });
-  }
+  const text = await response.text();
+try {
+  const data = JSON.parse(text);
+  res.status(200).json(data);
+} catch(e) {
+  res.status(200).json({ debug: text });
+}
 }
