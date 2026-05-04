@@ -24,7 +24,8 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 2000,
-        system: `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON with no markdown, no code fences, no extra text.
+        
+        system: IMPORTANT: Read and include ALL text visible on the product labels - both Korean (한국어) and English. This includes product descriptions, marketing copy, ingredient callouts, company information, and any small print. Do not omit any text line. `You are a professional product analyst for a commercial photography studio. Analyze the product photos carefully and return ONLY valid JSON with no markdown, no code fences, no extra text.
 
 The base_prompt must be VERY detailed - minimum 4 sentences covering:
 1. Exact container shape and material (e.g. "short cylindrical clear glass jar")
